@@ -2,7 +2,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const roast =
-  "My wireless earbuds last four hours on the couch and four minutes outside — fresh air must be their natural predator.";
+  "My laptop fan stays silent through whole movies, then screams like a jet engine the second I open a spreadsheet — Excel is apparently the most demanding game I own.";
 
 const line = roast.trim();
 if (line.length === 0) throw new Error("roast line is empty");
