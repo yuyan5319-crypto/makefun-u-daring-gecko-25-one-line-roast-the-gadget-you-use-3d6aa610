@@ -1,6 +1,8 @@
 // One-Line Roast: The Gadget You Use Every Day
 // Writes a single original roast line to $MAKEFUN_OUTPUT_DIR/entry.txt
 // (default /output/entry.txt) and prints it to stdout.
+// Note: $MAKEFUN_OUTPUT_DIR names the output DIRECTORY, not the file;
+// the entry file is always entry.txt inside that directory.
 // The line must be non-empty, a single line, and at most 200 characters.
 
 import { mkdirSync, writeFileSync } from "node:fs";
@@ -31,10 +33,15 @@ if (line.length > MAX_CHARS) {
   );
 }
 
-// Resolve the output file: the env var names the entry file itself
-// (e.g. /output/entry.txt); fall back to the default location.
-const outputFile =
-  process.env.MAKEFUN_OUTPUT_DIR ?? "/output/entry.txt";
+// Resolve the output file: $MAKEFUN_OUTPUT_DIR is a DIRECTORY
+// (the grader sets it to /output); the entry file is entry.txt
+// inside it. Only treat the value as a file path when it already
+// ends with "entry.txt"; otherwise join "entry.txt" inside the dir.
+// When unset, default to /output/entry.txt.
+const outputDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
+const outputFile = outputDir.endsWith("entry.txt")
+  ? outputDir
+  : join(outputDir, "entry.txt");
 
 mkdirSync(dirname(outputFile), { recursive: true });
 writeFileSync(join(outputFile), line + "\n", "utf8");
